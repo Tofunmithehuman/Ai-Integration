@@ -15,6 +15,7 @@ client = OpenAI(
     base_url=BASE_URL,
 )
 
+
 def generate_ai_content(prompt, system_content):
     try:
         chat_completion = client.chat.completions.create(
@@ -31,30 +32,41 @@ def generate_ai_content(prompt, system_content):
         print(f"Error generating content: {e}")
         return None
 
+
 def generate_resume_summary(job_title):
     system_content = "You are a professional resume writer. Be concise and impactful."
     prompt = f"Write a professional resume summary for a {job_title}:"
     return generate_ai_content(prompt, system_content)
 
+
 def extract_keywords(job_title):
     system_content = "You are a job market expert. Provide relevant keywords."
     prompt = f"List relevant keywords for a {job_title}, separated by commas:"
     keywords = generate_ai_content(prompt, system_content)
-    return [keyword.strip() for keyword in keywords.split(',')] if keywords else []
+    return [keyword.strip() for keyword in keywords.split(",")] if keywords else []
+
 
 def generate_role_objectives(job_title):
-    system_content = "You are a career counselor. Provide clear and actionable objectives."
+    system_content = (
+        "You are a career counselor. Provide clear and actionable objectives."
+    )
     prompt = f"List role objectives for a {job_title}:"
     objectives = generate_ai_content(prompt, system_content)
-    return [obj.strip() for obj in objectives.split('\n') if obj.strip()] if objectives else []
+    return (
+        [obj.strip() for obj in objectives.split("\n") if obj.strip()]
+        if objectives
+        else []
+    )
+
 
 def generate_resume_content(job_title):
     content = {
         "resume_summary": generate_resume_summary(job_title),
         "optimized_keywords": extract_keywords(job_title),
-        "role_objectives": generate_role_objectives(job_title)
+        "role_objectives": generate_role_objectives(job_title),
     }
     return json.dumps(content, indent=2)
+
 
 # Example usage
 if __name__ == "__main__":
